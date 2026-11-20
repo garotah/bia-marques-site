@@ -1,0 +1,229 @@
+
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  --fundo: #0b0709;
+  --fundo-2: #150a11;
+  --texto: #fbeef4;
+  --texto-suave: #d3b8c5;
+  --acento: #ff4fa3;         /* rosa-choque da Garota */
+  --acento-texto: #0b0709;
+  --linha: rgb(251 238 244 / 0.14);
+  --painel: rgb(18 8 14 / 0.62);
+
+  --fonte-titulo: "Bebas Neue", Impact, sans-serif;
+  --fonte-texto: "Figtree", system-ui, sans-serif;
+
+  --raio: 18px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --largura: 1240px;
+  --ease: cubic-bezier(.2, .7, .1, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font: 400 clamp(16px, 1.05vw, 18px)/1.6 var(--fonte-texto);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--fonte-titulo); font-weight: 400; line-height: 1; margin: 0 0 .4em; letter-spacing: .02em; text-transform: uppercase; text-wrap: balance; }
+h1 { font-size: clamp(60px, 9vw, 120px); }
+h2 { font-size: clamp(44px, 5.4vw, 80px); }
+h3 { font-size: clamp(30px, 2.4vw, 36px); }
+p { margin: 0 0 1em; color: var(--texto-suave); text-wrap: pretty; }
+
+/* ── Topo ──────────────────────────────────────────────────────────────── */
+.topo {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: max(12px, env(safe-area-inset-top)) var(--gutter) 12px;
+  transition: background .4s var(--ease), backdrop-filter .4s;
+}
+.topo.rolou { background: rgb(11 7 9 / .72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.marca { text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.marca-logo { height: 40px; width: 40px; border-radius: 50%; object-fit: cover; transform: scale(1.04); }
+.marca-texto { font-family: var(--fonte-titulo); font-size: 26px; letter-spacing: .06em; text-transform: uppercase; }
+.menu { display: flex; gap: 26px; align-items: center; font-size: 14px; letter-spacing: .04em; }
+.menu a { text-decoration: none; opacity: .85; transition: opacity .3s; }
+.menu a:hover { opacity: 1; }
+.menu-cta { background: var(--acento); color: var(--acento-texto); padding: 10px 18px; border-radius: 999px; opacity: 1 !important; font-weight: 600; }
+
+/* ── Abertura (vídeo em loop) ──────────────────────────────────────────── */
+.hero { position: relative; }
+.hero-palco { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: var(--fundo); }
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Desktop: vídeo vertical inteiro no centro, fundo desfocado dele mesmo */
+.hero-fundo { filter: blur(36px) brightness(.5) saturate(1.2); transform: scale(1.15); }
+/* Desktop: texto à esquerda, vídeo inteiro à direita (nada cobre a modelo) */
+@media (min-width: 861px) {
+  .hero-video:not(.hero-fundo) { object-fit: contain; left: auto; right: 0; width: 56%; }
+  .hero-fundo { filter: blur(40px) brightness(.45) saturate(1.2); }
+  .hero-vinheta {
+    background:
+      linear-gradient(to right, rgb(11 7 9 / .85), rgb(11 7 9 / .35) 40%, transparent 55%),
+      linear-gradient(to bottom, rgb(11 7 9 / .5), transparent 20%),
+      linear-gradient(to bottom, transparent 88%, var(--fundo) 100%);
+  }
+  .hero-conteudo { top: 0; bottom: 0; right: auto; left: var(--gutter); width: min(40%, 520px); align-items: center; justify-content: flex-start; }
+  .hero-conteudo .painel { text-align: left; background: transparent; border-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; padding-left: 0; }
+  .hero-conteudo .acoes { justify-content: flex-start; }
+  .hero-conteudo h1 { font-size: clamp(64px, 7.5vw, 112px); }
+}
+.hero-vinheta {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgb(11 7 9 / .55), transparent 22%),
+    linear-gradient(to top, rgb(11 7 9 / .92), rgb(11 7 9 / .35) 42%, transparent 68%),
+    linear-gradient(to bottom, transparent 85%, var(--fundo) 100%);
+}
+.hero-conteudo {
+  position: absolute; left: var(--gutter); right: var(--gutter);
+  bottom: max(28px, env(safe-area-inset-bottom));
+  display: flex; justify-content: center;
+}
+.hero-conteudo .painel { width: 100%; max-width: 560px; text-align: center; }
+.titulo-abertura { margin-bottom: .15em; }
+.apoio { font-size: clamp(16px, 1.3vw, 19px); margin: 0 0 20px; color: var(--texto); }
+
+/* ── Painéis (todo texto mora num painel) ──────────────────────────────── */
+.painel {
+  position: relative;
+  background: var(--painel);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  padding: clamp(22px, 3.2vw, 48px);
+  backdrop-filter: blur(18px) saturate(1.1);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+}
+.painel--vidro { background: rgb(11 7 9 / .5); }
+.painel > :last-child { margin-bottom: 0; }
+.rotulo { display: block; font-size: 12px; letter-spacing: .3em; color: var(--acento); margin-bottom: 14px; }
+
+/* ── Seções ────────────────────────────────────────────────────────────── */
+.secao {
+  position: relative; isolation: isolate; overflow: clip;
+  min-height: 100vh; padding: 16vh var(--gutter);
+  display: grid; align-content: center;
+}
+.secao-grade { width: 100%; max-width: var(--largura); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 560px) 1fr; }
+.secao--larga { gap: 24px; justify-items: center; grid-template-columns: minmax(0, 1fr); }
+.painel--cabecalho { width: 100%; max-width: var(--largura); }
+.painel--cabecalho h2 { margin: 0; }
+.cartoes { width: 100%; max-width: var(--largura); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 16px; }
+.cartao h3 { margin-bottom: .3em; }
+.cartao { transition: transform .5s var(--ease), border-color .5s; }
+.cartao:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--acento) 50%, transparent); }
+
+/* ── Foto da seção Sobre (foto real, borda dissolvida) ─────────────────── */
+.arte {
+  position: absolute; z-index: -1; pointer-events: none; object-fit: cover; object-position: 50% 30%;
+  top: 0; bottom: 0; right: 0; width: 56vw; height: 100%;
+  -webkit-mask-image: linear-gradient(to left, #000 38%, transparent 96%), linear-gradient(to bottom, transparent, #000 18%, #000 80%, transparent);
+          mask-image: linear-gradient(to left, #000 38%, transparent 96%), linear-gradient(to bottom, transparent, #000 18%, #000 80%, transparent);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+
+/* ── Botões e cartões de link ──────────────────────────────────────────── */
+.botao {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font: 600 16px/1 var(--fonte-texto); letter-spacing: .02em; text-decoration: none; cursor: pointer;
+  color: var(--acento-texto); background: var(--acento); border: 1px solid var(--acento); border-radius: 999px;
+  padding: 18px 30px; min-height: 52px; transition: transform .4s var(--ease), filter .3s;
+}
+.botao:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.botao--contorno { background: transparent; color: var(--texto); }
+.acoes { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-conteudo .acoes { justify-content: center; }
+.painel--final { text-align: center; }
+.painel--final .acoes { justify-content: center; margin-top: 26px; }
+
+a.cartao { text-decoration: none; display: flex; flex-direction: column; gap: 4px; }
+.cartao p { margin: 0; }
+.cartao-ir { margin-top: auto; padding-top: 14px; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--acento); }
+.cartao-ir::after { content: " →"; }
+.cartao--destaque { border-color: var(--acento); background: color-mix(in srgb, var(--acento) 16%, var(--painel)); }
+[data-link].oculto { display: none !important; }
+
+/* ── Galeria (fotos reais) ─────────────────────────────────────────────── */
+.galeria { width: 100%; max-width: var(--largura); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.foto { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--raio); border: 1px solid var(--linha); }
+
+.secao--contato { justify-items: center; }
+.painel--form { width: 100%; max-width: 760px; }
+
+/* ── Botão flutuante do Privacy ────────────────────────────────────────── */
+.flutuante {
+  position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 60;
+  font: 400 22px/1 var(--fonte-titulo); letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+  color: var(--acento-texto); background: var(--acento); padding: 15px 26px; border-radius: 999px;
+  box-shadow: 0 10px 30px rgb(255 79 163 / .35);
+  transform: scale(0); transition: transform .5s var(--ease);
+}
+.flutuante.visivel { transform: scale(1); }
+
+/* ── Rodapé ────────────────────────────────────────────────────────────── */
+.rodape { padding: 0 var(--gutter) 96px; }
+.rodape-painel { max-width: var(--largura); margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px 32px; align-items: center; justify-content: space-between; font-size: 14px; color: var(--texto-suave); padding: 22px 28px; }
+
+/* ── Revelar ao rolar ──────────────────────────────────────────────────── */
+.revelar { opacity: 0; transform: translateY(32px); transition: opacity .9s var(--ease), transform 1s var(--ease); }
+.revelar.visto { opacity: 1; transform: none; }
+
+/* ── Celular ───────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .menu a:not(.menu-cta) { display: none; }
+  .secao { padding: 56px var(--gutter); min-height: auto; }
+  .secao-grade { grid-template-columns: minmax(0, 1fr); }
+  .painel { padding: 22px 20px; }
+
+  /* Sobre: a foto vira o topo da seção e o painel sobe por cima dela */
+  #sobre { padding-top: 0; padding-bottom: 56px; }
+  .arte {
+    position: relative; z-index: 0; inset: auto; width: calc(100% + 2 * var(--gutter)); height: 62svh; max-height: 560px;
+    margin: 0 calc(-1 * var(--gutter)) -56px; object-position: 50% 25%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 58%, transparent);
+            mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 58%, transparent);
+    -webkit-mask-composite: source-over; mask-composite: add;
+  }
+  #sobre .secao-grade { position: relative; z-index: 1; }
+
+  /* Links: uma coluna, cartões compactos e fáceis de tocar */
+  .cartoes { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .cartao { padding: 16px 18px; display: grid; grid-template-columns: 1fr auto; column-gap: 12px; align-items: center; }
+  .cartao h3 { grid-column: 1; margin: 0; font-size: 30px; }
+  .cartao p { grid-column: 1; font-size: 14px; line-height: 1.4; }
+  .cartao-ir { grid-column: 2; grid-row: 1 / span 2; margin: 0; padding: 0; font-size: 12px; }
+
+  /* Galeria: carrossel horizontal com encaixe */
+  .galeria { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter) 8px; scrollbar-width: none; }
+  .galeria::-webkit-scrollbar { display: none; }
+  .foto { flex: 0 0 76%; scroll-snap-align: center; }
+
+  .acoes { flex-direction: column; }
+  .acoes .botao { width: 100%; }
+  /* Abertura no celular: faixa baixa e enxuta, a modelo fica livre na tela */
+  .hero-vinheta {
+    background:
+      linear-gradient(to bottom, rgb(11 7 9 / .5), transparent 16%),
+      linear-gradient(to top, rgb(11 7 9 / .9), rgb(11 7 9 / .45) 18%, transparent 30%);
+  }
+  .hero-conteudo { bottom: max(14px, env(safe-area-inset-bottom)); }
+  .hero-conteudo .painel { padding: 0; background: transparent; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .hero-conteudo h1 { font-size: 46px; margin: 0 0 10px; }
+  .hero-conteudo .apoio { display: none; }
+  .hero-conteudo .acoes { flex-direction: row; gap: 10px; }
+  .hero-conteudo .acoes .botao { width: auto; flex: 1; padding: 15px 12px; font-size: 15px; }
+  .hero-conteudo .acoes .botao--contorno { flex: 0 0 38%; background: rgb(11 7 9 / .45); }
+  .rodape { padding-bottom: 88px; }
+  .rodape-painel { flex-direction: column; align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .revelar { opacity: 1; transform: none; }
+}
