@@ -7,7 +7,7 @@
   const hero = document.querySelector(".hero");
   const video = hero && hero.querySelector(".hero-video");
   if (video && S.video) {
-    video.src = larga ? S.video.desktop : S.video.celular;
+    if (!video.getAttribute("src")) video.src = larga ? S.video.desktop : S.video.celular;
     video.muted = true;
 
     // Desktop: o vídeo é vertical, então aparece inteiro e o fundo é o mesmo vídeo desfocado
@@ -16,7 +16,7 @@
       fundo = video.cloneNode();
       fundo.classList.add("hero-fundo");
       fundo.removeAttribute("poster");
-      fundo.src = video.src;
+      if (fundo.getAttribute("src") !== video.getAttribute("src")) fundo.src = video.src;
       video.parentNode.insertBefore(fundo, video);
     }
     const videos = [video, fundo].filter(Boolean);
